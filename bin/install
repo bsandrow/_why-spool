@@ -1,0 +1,16 @@
+#!/bin/bash
+
+INSTALLDIR="tmp"
+BINDIR="bin"
+PACKAGE_NAME="ghostpcl-9.07-linux-x86"
+BINARY_NAME="pcl6-907-linux_x86"
+PACKAGE_URL="http://downloads.ghostscript.com/public/binaries/$PACKAGE_NAME.tgz"
+
+mkdir -p "$INSTALLDIR"
+(
+    cd "$INSTALLDIR"
+    wget "$PACKAGE_URL"
+    tar xzf "$PACKAGE_NAME.tgz"
+)
+
+ln -s "../$INSTALLDIR/$PACKAGE_NAME/$BINARY_NAME" "$BINDIR/builder"

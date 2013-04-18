@@ -1,0 +1,25 @@
+#!/bin/bash
+
+url="http://whytheluckystiff.net"
+
+print_spool()
+{
+    wget -qO- "$url"
+}
+
+spool_urls()
+{
+    print_spool | grep -P '^SPOOL/\w+\s+\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z' | sed -e 's,^\(SPOOL/.\+\)\t.*$,\1,' -e "s,^,$url/,"
+}
+
+spool_file()
+{
+    echo "$1" | sed -e 's,^.*/SPOOL/\(.\+\)$,\1,'
+}
+
+echo "Downloading PCL files..."
+spool_urls | while read spool_entry; do
+    file="$(spool_file "$spool_entry")"
+    echo "  $file"
+    wget -q -O "src/$file" "$spool_entry"
+done

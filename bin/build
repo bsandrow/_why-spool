@@ -1,0 +1,16 @@
+#!/bin/bash
+
+BUILDER="bin/builder"
+
+echo "Building files..."
+ls src/* | while read pcl_file; do
+    file_base="$(basename $pcl_file)"
+
+    echo "  $file_base.pdf"
+    $BUILDER -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="build/${file_base}.pdf" "$pcl_file"
+
+    # I tried the jpeg and png output, but it was illegible, while the PDF
+    # output was fine.
+    #$BUILDER -sDEVICE=jpeg     -sOutputFile="build/${file_base}.jpg" "$pcl_file"
+    #$BUILDER -sDEVICE=png16m   -sOutputFile="build/${file_base}.png" "$pcl_file"
+done
