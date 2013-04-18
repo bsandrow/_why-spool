@@ -17,9 +17,20 @@ spool_file()
     echo "$1" | sed -e 's,^.*/SPOOL/\(.\+\)$,\1,'
 }
 
+directory_updated()
+{
+    dir="$1"
+    [ $(git ls-files -om "$dir" | wc -l) -gt 0 ]
+}
+
 echo "Downloading PCL files..."
 spool_urls | while read spool_entry; do
     file="$(spool_file "$spool_entry")"
     echo "  $file"
     wget -q -O "src/$file" "$spool_entry"
 done
+
+if directory_updated "src"; then
+    git add src
+    git ci -m 'New PCL files'
+fi
